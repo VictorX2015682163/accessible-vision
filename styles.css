@@ -1,0 +1,165 @@
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --accent: #ffd400;      /* 高对比黄色,弱视者也易辨 */
+  --danger: #ff3b30;
+  --ok: #34c759;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 摄像头铺满背景 */
+#camera {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #111;
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) 24px 0;
+  text-align: center;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.15) 40%, rgba(0,0,0,.55));
+}
+
+.status {
+  position: absolute;
+  top: max(24px, env(safe-area-inset-top));
+  left: 0; right: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 0 16px;
+  text-shadow: 0 2px 6px rgba(0,0,0,.9);
+}
+
+/* 识别结果:超大字,弱视者也能看 */
+.result {
+  font-size: clamp(48px, 22vw, 160px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 16px rgba(0,0,0,.95);
+  word-break: break-all;
+}
+
+.hint {
+  position: absolute;
+  bottom: 210px;
+  font-size: 20px;
+  color: #eee;
+  opacity: .9;
+  line-height: 1.6;
+  text-shadow: 0 2px 6px rgba(0,0,0,.9);
+}
+
+/* 主识别按钮:占屏幕大半,超大触控区 */
+.scan-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 6px solid var(--fg);
+  background: var(--accent);
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.6);
+  cursor: pointer;
+  transition: transform .08s ease;
+}
+.scan-btn:active { transform: translateX(-50%) scale(.94); }
+.scan-btn__icon { font-size: 52px; line-height: 1; }
+.scan-btn__text { font-size: 30px; font-weight: 900; letter-spacing: 6px; }
+.scan-btn:disabled { opacity: .5; }
+
+/* 底部工具条 */
+.toolbar {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: rgba(0,0,0,.65);
+}
+.tool {
+  flex: 1;
+  min-height: 72px;
+  border: none;
+  border-top: 2px solid #333;
+  background: transparent;
+  color: var(--fg);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tool:active { background: #222; }
+.tool + .tool { border-left: 2px solid #333; }
+
+/* 中心取景框:引导对准,OCR 只识别框内 */
+.frame-guide {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 30%;
+  height: 24%;
+  pointer-events: none;
+  z-index: 2;
+}
+.frame-guide__corner {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 5px solid var(--accent);
+}
+.frame-guide__corner.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+.frame-guide__corner.tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+.frame-guide__corner.bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+.frame-guide__corner.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+/* 识别进行中的脉冲动画 */.busy .scan-btn {
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,212,0,.7); }
+  50%     { box-shadow: 0 0 0 24px rgba(255,212,0,0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .busy .scan-btn { animation: none; }
+  .scan-btn { transition: none; }
+}

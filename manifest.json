@@ -1,0 +1,16 @@
+{
+  "name": "慧眼 · 盲人识物",
+  "short_name": "慧眼",
+  "description": "专为盲人设计的智能识物应用:识别门牌号与物品文字,语音播报。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "zh-CN",
+  "categories": ["accessibility", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

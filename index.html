@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>慧眼 · 盲人识物</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 整个屏幕就是一个大按钮:点任意位置开始识别 -->
+  <main id="app" role="application" aria-label="盲人识物应用">
+
+    <!-- 摄像头预览(视力正常者可见,盲人不依赖) -->
+    <video id="camera" playsinline autoplay muted aria-hidden="true"></video>
+    <canvas id="snapshot" hidden aria-hidden="true"></canvas>
+
+    <!-- 中心取景框:把门牌对准框内,OCR 只识别框内区域 -->
+    <div id="frameGuide" class="frame-guide" aria-hidden="true">
+      <span class="frame-guide__corner tl"></span>
+      <span class="frame-guide__corner tr"></span>
+      <span class="frame-guide__corner bl"></span>
+      <span class="frame-guide__corner br"></span>
+    </div>
+
+    <!-- 半透明遮罩 + 状态文字 -->
+    <div id="overlay">
+      <div id="status" class="status" role="status" aria-live="assertive">
+        正在启动摄像头…
+      </div>
+      <div id="result" class="result" aria-live="polite"></div>
+      <div id="hint" class="hint">
+        点击屏幕任意位置<br>开始识别门牌号
+      </div>
+    </div>
+
+    <!-- 大号操作按钮:主拍照键 -->
+    <button id="scanBtn" class="scan-btn" aria-label="拍照识别门牌号,双击屏幕任意位置也可触发">
+      <span class="scan-btn__icon" aria-hidden="true">◎</span>
+      <span class="scan-btn__text">识 别</span>
+    </button>
+
+    <!-- 底部工具条 -->
+    <div class="toolbar" role="toolbar" aria-label="辅助功能">
+      <button id="repeatBtn" class="tool" aria-label="重复朗读上次识别结果">🔊 重读</button>
+      <button id="modeBtn" class="tool" aria-label="切换识别模式,当前为门牌号模式">🔢 模式</button>
+      <button id="helpBtn" class="tool" aria-label="使用帮助">❓ 帮助</button>
+    </div>
+  </main>
+
+  <!-- Tesseract.js OCR 引擎(CDN;打包离线时改为本地) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
